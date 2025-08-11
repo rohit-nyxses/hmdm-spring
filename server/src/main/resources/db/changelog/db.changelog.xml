@@ -38,7 +38,7 @@
                 login varchar(30) NOT NULL CONSTRAINT login_key UNIQUE,
                 email varchar(50),
                 name varchar(50),
-                password varchar(32) NOT NULL
+                password varchar(64) NOT NULL
             );
         </sql>
         <rollback>
@@ -50,7 +50,7 @@
         <comment>Insert default admin user</comment>
         <sql>
             INSERT INTO users(login, email, name, password)
-            VALUES ('admin', 'fast.daemon@gmail.com', 'admin', '21232f297a57a5a743894a0e4a801fc3');
+            VALUES ('admin', 'fast.daemon@gmail.com', 'admin', '66B888B21A98854C035CA5D480182EE6BA745757');
         </sql>
         <rollback></rollback>
     </changeSet>
@@ -368,52 +368,52 @@
             ALTER TABLE users DROP COLUMN customerId;
         </rollback>
     </changeSet>
-
-<!--    <changeSet id="16.01.19-16:10" author="isv" context="shared">-->
-<!--        <comment>Create master-customer and default customer accounts for SHARED usage scenario and link existing-->
-<!--            admin user to master-customer account</comment>-->
-<!--        <sql>-->
-<!--            INSERT INTO customers (name, description, master, filesDir) VALUES ('DEFAULT', 'Default customer account used for managing the already existing application data in SHARED usage scenario', FALSE, 'DEFAULT');-->
-<!--            UPDATE users SET customerId = currval('customers_id_seq');-->
-
-<!--            INSERT INTO customers (name, description, master, filesDir) VALUES ('ADMIN', 'Global customer account used for managing the application data for all customers in SHARED usage scenario', TRUE, 'ADMIN');-->
-<!--            INSERT INTO users (login, name, password, customerId)-->
-<!--               SELECT 'superadmin', 'Super Admin', password, currval('customers_id_seq')-->
-<!--               FROM users WHERE login='admin';-->
-<!--        </sql>-->
-<!--        <rollback>-->
-<!--            DELETE FROM users WHERE login='superadmin';-->
-<!--            UPDATE users SET customerId = NULL;-->
-<!--            DELETE FROM customers;-->
-<!--        </rollback>-->
-<!--    </changeSet>-->
-
+<!--//edited this (comment this afterwards)-->
     <changeSet id="16.01.19-16:10" author="isv" context="shared">
-        <comment>Create master-customer and default customer accounts for SHARED usage scenario</comment>
+        <comment>Create master-customer and default customer accounts for SHARED usage scenario and link existing
+            admin user to master-customer account</comment>
         <sql>
-            -- For PostgreSQL
-            INSERT INTO customers (name, description, master, filesDir)
-            SELECT 'DEFAULT', 'Default customer account used for managing the already existing application data in SHARED usage scenario', FALSE, 'DEFAULT'
-            WHERE NOT EXISTS (SELECT 1 FROM customers WHERE name = 'DEFAULT');
+            INSERT INTO customers (name, description, master, filesDir) VALUES ('DEFAULT', 'Default customer account used for managing the already existing application data in SHARED usage scenario', FALSE, 'DEFAULT');
+            UPDATE users SET customerId = currval('customers_id_seq');
 
-            UPDATE users SET customerId = (SELECT id FROM customers WHERE name = 'DEFAULT' LIMIT 1)
-            WHERE customerId IS NULL;
-
-            INSERT INTO customers (name, description, master, filesDir)
-            SELECT 'ADMIN', 'Global customer account used for managing the application data for all customers in SHARED usage scenario', TRUE, 'ADMIN'
-            WHERE NOT EXISTS (SELECT 1 FROM customers WHERE name = 'ADMIN');
-
+            INSERT INTO customers (name, description, master, filesDir) VALUES ('ADMIN', 'Global customer account used for managing the application data for all customers in SHARED usage scenario', TRUE, 'ADMIN');
             INSERT INTO users (login, name, password, customerId)
-            SELECT 'superadmin', 'Super Admin', password, (SELECT id FROM customers WHERE name = 'ADMIN' LIMIT 1)
-            FROM users WHERE login='admin'
-            AND NOT EXISTS (SELECT 1 FROM users WHERE login='superadmin');
+               SELECT 'superadmin', 'Super Admin', password, currval('customers_id_seq')
+               FROM users WHERE login='admin';
         </sql>
         <rollback>
             DELETE FROM users WHERE login='superadmin';
-            UPDATE users SET customerId = NULL WHERE customerId IN (SELECT id FROM customers WHERE name IN ('DEFAULT', 'ADMIN'));
-            DELETE FROM customers WHERE name IN ('DEFAULT', 'ADMIN');
+            UPDATE users SET customerId = NULL;
+            DELETE FROM customers;
         </rollback>
     </changeSet>
+<!--//till here-->
+<!--    <changeSet id="16.01.19-16:10" author="isv" context="shared">-->
+<!--        <comment>Create master-customer and default customer accounts for SHARED usage scenario</comment>-->
+<!--        <sql>-->
+<!--            &#45;&#45; For PostgreSQL-->
+<!--            INSERT INTO customers (name, description, master, filesDir)-->
+<!--            SELECT 'DEFAULT', 'Default customer account used for managing the already existing application data in SHARED usage scenario', FALSE, 'DEFAULT'-->
+<!--            WHERE NOT EXISTS (SELECT 1 FROM customers WHERE name = 'DEFAULT');-->
+
+<!--            UPDATE users SET customerId = (SELECT id FROM customers WHERE name = 'DEFAULT' LIMIT 1)-->
+<!--            WHERE customerId IS NULL;-->
+
+<!--            INSERT INTO customers (name, description, master, filesDir)-->
+<!--            SELECT 'ADMIN', 'Global customer account used for managing the application data for all customers in SHARED usage scenario', TRUE, 'ADMIN'-->
+<!--            WHERE NOT EXISTS (SELECT 1 FROM customers WHERE name = 'ADMIN');-->
+
+<!--            INSERT INTO users (login, name, password, customerId)-->
+<!--            SELECT 'superadmin', 'Super Admin', password, (SELECT id FROM customers WHERE name = 'ADMIN' LIMIT 1)-->
+<!--            FROM users WHERE login='admin'-->
+<!--            AND NOT EXISTS (SELECT 1 FROM users WHERE login='superadmin');-->
+<!--        </sql>-->
+<!--        <rollback>-->
+<!--            DELETE FROM users WHERE login='superadmin';-->
+<!--            UPDATE users SET customerId = NULL WHERE customerId IN (SELECT id FROM customers WHERE name IN ('DEFAULT', 'ADMIN'));-->
+<!--            DELETE FROM customers WHERE name IN ('DEFAULT', 'ADMIN');-->
+<!--        </rollback>-->
+<!--    </changeSet>-->
 
 <!--    <changeSet id="16.01.19-16:11" author="isv" context="private">-->
 <!--        <comment>Create default customer account for PRIVATE usage scenario and link existing admin account to default-->
