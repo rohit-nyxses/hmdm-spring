@@ -20,4 +20,10 @@ jwt:
   hmdm.background.threads: 10
   hmdm.scheduled.threads: 2
 
+logging:
+  file:
+    name: logs/app.log   # Path & name of your log file
+  level:
+    root: INFO           # Default logging level for all packages
+    com.hmdm: DEBUG  # More verbose logging for your own code
 

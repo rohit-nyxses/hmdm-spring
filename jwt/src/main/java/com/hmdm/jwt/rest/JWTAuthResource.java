@@ -140,19 +140,17 @@ public class JWTAuthResource {
 
     @PostMapping("/login")
     public ResponseEntity<JWTToken> login(@RequestBody UserCredentials credentials) {
-//        System.out.println("\uD83D\uDD35 Login endpoint hit with credentials: " + credentials.getLogin());
+        System.out.println("\uD83D\uDD35 Login endpoint hit with credentials: " + credentials.getLogin());
         try {
             if (credentials.getLogin() == null || credentials.getPassword() == null) {
                 return ResponseEntity.badRequest().build();
             }
 
             User user = unsecureDAO.findByLoginOrEmail(credentials.getLogin());
-//            System.out.println(user.getLogin());
-//            System.out.println("\uD83D\uDD0D Input password (plain): " + credentials.getPassword());
-//            System.out.println("\uD83D\uDD0D DB password (hashed): " + user.getPassword());
+            System.out.println(user.getLogin());
+
 
             boolean matched = passwordUtil.passwordMatch(credentials.getPassword(), user.getPassword());
-//            System.out.println("\u2705 Password match result: " + matched);
 
             if (user.getLogin() == null || user.getPassword() == null || !matched) {
 //                System.out.println("\u274C Login failed: user not found or password mismatch");
@@ -173,7 +171,7 @@ public class JWTAuthResource {
             }
             user.setPassword(null);
 
-            String token = tokenProvider.createToken(user, false);
+            String token = tokenProvider.createToken(user, credentials.getRemember());
             JWTToken result = new JWTToken(token);
 
             return ResponseEntity.ok()

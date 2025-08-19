@@ -26,7 +26,13 @@ public class SecurityConfig {
                 .cors(cors -> {}) // Enable CORS with defaults (or customize if needed)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("public/jwt/login", "/api/auth/**").permitAll() // Allow login/auth endpoints
+
                         .anyRequest().authenticated() // All others require authentication
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

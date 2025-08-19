@@ -22,12 +22,25 @@ public class UserCredentials implements Serializable {
     @JsonProperty("password")
     private String password;
 
+
+    @JsonProperty("remember")
+    private boolean remember;
+
     /**
      * @deprecated This field is deprecated and will be removed in future versions.
      */
     @Deprecated
     @JsonProperty("email")
     private String email;
+
+
+    public boolean getRemember() {
+        return remember;
+    }
+
+    public void setRemember(boolean remember) {
+        this.remember = remember;
+    }
 
     public UserCredentials() {
         // Default constructor
