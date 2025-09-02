@@ -1,6 +1,7 @@
 package com.hmdm.jwt.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 /**
  * A JWT token identifying a single client of the application.
  */
+@NoArgsConstructor
 public class JWTToken implements Serializable {
 
     @Serial
@@ -16,9 +18,6 @@ public class JWTToken implements Serializable {
     @JsonProperty("id_token")
     private String idToken;
 
-    public JWTToken() {
-        // Default constructor for deserialization
-    }
 
     public JWTToken(String idToken) {
         this.idToken = idToken;

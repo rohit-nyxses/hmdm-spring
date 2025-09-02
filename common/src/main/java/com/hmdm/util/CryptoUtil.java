@@ -1,254 +1,8 @@
-//package com.hmdm.util;
-//
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//
-//import java.io.BufferedInputStream;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.math.BigInteger;
-//import java.nio.charset.StandardCharsets;
-//import java.security.DigestInputStream;
-//import java.security.MessageDigest;
-//import java.security.NoSuchAlgorithmException;
-//import java.util.Base64;
-//import java.util.Random;
-//
-//public final class CryptoUtil {
-//
-//    private static final Logger logger = LoggerFactory.getLogger(CryptoUtil.class);
-//
-//    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
-//
-//    private CryptoUtil() {
-//        // Utility class
-//    }
-//
-//    public static String getMD5String(String value) {
-//        return hash(value, "MD5");
-//    }
-//
-//    public static String getSHA1String(String value) {
-//        return hash(value, "SHA-1");
-//    }
-//
-//    private static String hash(String value, String algorithm) {
-//        try {
-//            MessageDigest md = MessageDigest.getInstance(algorithm);
-//            byte[] digest = md.digest(value.getBytes(StandardCharsets.UTF_8));
-//            return toHexString(digest).toUpperCase();
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException("Hash algorithm not found: " + algorithm, e);
-//        }
-//    }
-//
-//    public static String toHexString(byte[] digest) {
-//        char[] hexChars = new char[digest.length * 2];
-//        for (int i = 0; i < digest.length; i++) {
-//            int v = digest[i] & 0xFF;
-//            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
-//            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
-//        }
-//        return new String(hexChars);
-//    }
-//
-//    public static String getBase64String(byte[] digest) {
-//        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
-//    }
-//
-//    public static String calculateChecksum(InputStream fileContent) throws IOException {
-//        try {
-//            MessageDigest md = MessageDigest.getInstance("MD5");
-//
-//            try (InputStream is = new BufferedInputStream(fileContent);
-//                 DigestInputStream dis = new DigestInputStream(is, md)) {
-//                while (dis.read() != -1) {
-//                    // reading stream to EOF
-//                }
-//            }
-//
-//            byte[] digest = md.digest();
-//            BigInteger no = new BigInteger(1, digest);
-//            String hashtext = no.toString(16);
-//
-//            // Pad with leading 0s to make it 32 chars
-//            while (hashtext.length() < 32) {
-//                hashtext = "0" + hashtext;
-//            }
-//
-//            return hashtext;
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException("MD5 algorithm not available", e);
-//        }
-//    }
-//
-//    public static String getDataSignature(String hashSecret, Object data) {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        try {
-//            String json = objectMapper.writeValueAsString(data).replaceAll("\\s", "");
-//            return getSHA1String(hashSecret + json);
-//        } catch (Exception e) {
-//            logger.error("Error while generating data signature", e);
-//            return "";
-//        }
-//    }
-//
-//    public static boolean checkRequestSignature(String signature, String value) {
-//        if (signature == null || value == null) {
-//            return false;
-//        }
-//
-//        try {
-//            String expectedSignature = getSHA1String(value);
-//            return signature.equalsIgnoreCase(expectedSignature);
-//        } catch (Exception e) {
-//            logger.error("Error while checking request signature", e);
-//            return false;
-//        }
-//    }
-//
-//    public static String randomHexString(int length) {
-//        StringBuilder sb = new StringBuilder(length);
-//        Random random = new Random();
-//
-//        for (int i = 0; i < length; i++) {
-//            sb.append(HEX_ARRAY[random.nextInt(16)]);
-//        }
-//
-//        return sb.toString();
-//    }
-//}
-//
-////second version
-////package com.hmdm.util;
-////
-////import com.fasterxml.jackson.databind.ObjectMapper;
-////import org.slf4j.Logger;
-////import org.slf4j.LoggerFactory;
-////
-////import java.io.BufferedInputStream;
-////import java.io.IOException;
-////import java.io.InputStream;
-////import java.math.BigInteger;
-////import java.nio.charset.StandardCharsets;
-////import java.security.DigestInputStream;
-////import java.security.MessageDigest;
-////import java.security.NoSuchAlgorithmException;
-////import java.util.Base64;
-////import java.util.Random;
-////
-////public final class CryptoUtil {
-////
-////    private static final Logger logger = LoggerFactory.getLogger(CryptoUtil.class);
-////
-////    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
-////
-////    private CryptoUtil() {
-////        // Utility class
-////    }
-////
-////    public static String getMD5String(String value) {
-////        return hash(value, "MD5");
-////    }
-////
-////    public static String getSHA1String(String value) {
-////        return hash(value, "SHA-1");
-////    }
-////
-////    private static String hash(String value, String algorithm) {
-////        try {
-////            MessageDigest md = MessageDigest.getInstance(algorithm);
-////            byte[] digest = md.digest(value.getBytes(StandardCharsets.UTF_8));
-////            return toHexString(digest); // ensure lowercase
-////        } catch (NoSuchAlgorithmException e) {
-////            throw new RuntimeException("Hash algorithm not found: " + algorithm, e);
-////        }
-////    }
-////
-////    public static String toHexString(byte[] digest) {
-////        char[] hexChars = new char[digest.length * 2];
-////        for (int i = 0; i < digest.length; i++) {
-////            int v = digest[i] & 0xFF;
-////            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
-////            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
-////        }
-////        return new String(hexChars);
-////    }
-////
-////    public static String getBase64String(byte[] digest) {
-////        return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
-////    }
-////
-////    public static String calculateChecksum(InputStream fileContent) throws IOException {
-////        try {
-////            MessageDigest md = MessageDigest.getInstance("MD5");
-////
-////            try (InputStream is = new BufferedInputStream(fileContent);
-////                 DigestInputStream dis = new DigestInputStream(is, md)) {
-////                while (dis.read() != -1) {
-////                    // reading stream to EOF
-////                }
-////            }
-////
-////            byte[] digest = md.digest();
-////            BigInteger no = new BigInteger(1, digest);
-////            String hashtext = no.toString(16);
-////
-////            // Pad with leading 0s to make it 32 chars
-////            while (hashtext.length() < 32) {
-////                hashtext = "0" + hashtext;
-////            }
-////
-////            return hashtext;
-////        } catch (NoSuchAlgorithmException e) {
-////            throw new RuntimeException("MD5 algorithm not available", e);
-////        }
-////    }
-////
-////    public static String getDataSignature(String hashSecret, Object data) {
-////        ObjectMapper objectMapper = new ObjectMapper();
-////        try {
-////            String json = objectMapper.writeValueAsString(data).replaceAll("\\s", "");
-////            return getSHA1String(hashSecret + json);
-////        } catch (Exception e) {
-////            logger.error("Error while generating data signature", e);
-////            return "";
-////        }
-////    }
-////
-////    public static boolean checkRequestSignature(String signature, String value) {
-////        if (signature == null || value == null) {
-////            return false;
-////        }
-////
-////        try {
-////            String expectedSignature = getSHA1String(value);
-////            return signature.equalsIgnoreCase(expectedSignature);
-////        } catch (Exception e) {
-////            logger.error("Error while checking request signature", e);
-////            return false;
-////        }
-////    }
-////
-////    public static String randomHexString(int length) {
-////        StringBuilder sb = new StringBuilder(length);
-////        Random random = new Random();
-////
-////        for (int i = 0; i < length; i++) {
-////            sb.append(HEX_ARRAY[random.nextInt(16)]);
-////        }
-////
-////        return sb.toString();
-////    }
-////}
-
-
-// spring managed bean
 package com.hmdm.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.google.common.io.BaseEncoding;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
@@ -262,127 +16,124 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
+@Slf4j
 @Component
+@NoArgsConstructor
 public class CryptoUtil {
 
-    private static final char[] hexArray = "0123456789abcdef".toCharArray();
+    private static final char[] HEX_ARRAY = "0123456789abcdef".toCharArray();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Constructor for Spring (you can inject other dependencies here in future)
-    public CryptoUtil() {
-    }
-
-    public String getMD5String(String value) {
+    /**
+     * Generate MD5 hash from a string
+     */
+    public static String getMD5String(String value) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(value.getBytes(StandardCharsets.UTF_8));
-            byte[] digest = md.digest();
-            return getHexString(digest);
+            return getHexString(md.digest());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to generate MD5 hash", e);
         }
     }
 
-    public String getHexString(byte[] digest) {
+    /**
+     * Convert byte array to hex string
+     */
+    public static String getHexString(byte[] digest) {
         char[] hexChars = new char[digest.length * 2];
-
-        for (int i = 0; i < digest.length; ++i) {
-            int v = digest[i] & 255;
-            hexChars[i * 2] = hexArray[v >>> 4];
-            hexChars[i * 2 + 1] = hexArray[v & 15];
+        for (int i = 0; i < digest.length; i++) {
+            int v = digest[i] & 0xFF;
+            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
         }
-
         return new String(hexChars).toUpperCase();
     }
 
-//    public String getBase64String(byte[] digest) {
-//        return BaseEncoding.base64Url().encode(digest);
-//    }
-
+    /**
+     * Calculate MD5 checksum of an InputStream
+     */
     public String calculateChecksum(InputStream fileContent) throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
         try (InputStream is = new BufferedInputStream(fileContent);
              DigestInputStream dis = new DigestInputStream(is, md)) {
-            while (dis.read() != -1) {
-                // Stream read for checksum
-            }
+            while (dis.read() != -1) { /* read stream for checksum */ }
         }
 
         byte[] digest = md.digest();
         BigInteger no = new BigInteger(1, digest);
-        String hashtext = no.toString(16);
+        String hashText = no.toString(16);
 
-        while (hashtext.length() < 32) {
-            hashtext = "0" + hashtext;
+        while (hashText.length() < 32) {
+            hashText = "0" + hashText;
         }
 
-        return hashtext;
+        return hashText;
     }
 
-    public String getSHA1String(String value) {
+    /**
+     * Generate SHA-1 hash from a string
+     */
+    public static String getSHA1String(String value) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(value.getBytes());
-            byte[] digest = md.digest();
-
-            char[] hexChars = new char[digest.length * 2];
-            for (int i = 0; i < digest.length; i++) {
-                int v = digest[i] & 0xFF;
-                hexChars[i * 2] = hexArray[v >>> 4];
-                hexChars[i * 2 + 1] = hexArray[v & 0x0F];
-            }
-            String result = new String(hexChars).toUpperCase();
-//            System.out.println("🔐 SHA1 result = " + result);  // ✅ log the output
-            return result;
+            md.update(value.getBytes(StandardCharsets.UTF_8));
+            return getHexString(md.digest());
         } catch (Exception e) {
+            throw new RuntimeException("Failed to generate SHA-1 hash", e);
+        }
+    }
+
+    /**
+     * Generate a data signature using SHA-1 from secret + object
+     */
+    public static String getDataSignature(String hashSecret, Object data) {
+        try {
+            String json = objectMapper.writeValueAsString(data).replaceAll("\\s", "");
+            return getSHA1String(hashSecret + json);
+        } catch (Exception e) {
+            log.error("Failed to generate data signature", e);
             throw new RuntimeException(e);
         }
     }
 
-    public String getDataSignature(String hashSecret, Object data) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String s = "";
+    /**
+     * Verify SHA-1 signature
+     */
+    public static boolean checkRequestSignature(String signature, String value) {
+        if (signature == null) return false;
         try {
-            s = objectMapper.writeValueAsString(data);
+            String expected = getSHA1String(value);
+            return signature.equalsIgnoreCase(expected);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-        s = s.replaceAll("\\s", "");
-        return getSHA1String(hashSecret + s);
-    }
-
-    public boolean checkRequestSignature(String signature, String value) {
-        if (signature == null) {
-            return false;
-        }
-        try {
-            String goodSignature = getSHA1String(value);
-            return signature.equalsIgnoreCase(goodSignature);
-        } catch (Exception e) {
+            log.warn("Signature validation failed", e);
             return false;
         }
     }
 
+    /**
+     * Generate a random 512-bit key as a hex string
+     */
     public String generateHS512Key() {
-        byte[] keyBytes = new byte[64]; // 512 bits = 64 bytes
-        SecureRandom secureRandom = new SecureRandom();
-        secureRandom.nextBytes(keyBytes);
-
+        byte[] keyBytes = new byte[64]; // 512 bits
+        new SecureRandom().nextBytes(keyBytes);
         StringBuilder hexString = new StringBuilder();
         for (byte b : keyBytes) {
             hexString.append(String.format("%02x", b));
         }
-
-        return hexString.toString(); // 128-character hex string
+        return hexString.toString();
     }
-    public String randomHexString(int length) {
+
+    /**
+     * Generate a random hex string of given length
+     */
+    public static String randomHexString(int length) {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
-
         for (int i = 0; i < length; i++) {
-            sb.append(hexArray[random.nextInt(16)]);
+            sb.append(HEX_ARRAY[random.nextInt(16)]);
         }
-
         return sb.toString();
     }
 }

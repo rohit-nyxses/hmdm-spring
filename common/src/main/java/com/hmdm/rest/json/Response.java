@@ -1,8 +1,15 @@
 package com.hmdm.rest.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Response implements Serializable {
 
@@ -11,39 +18,6 @@ public class Response implements Serializable {
     private ResponseStatus status;
     private String message;
     private Object data;
-
-    public Response() {
-    }
-
-    private Response(ResponseStatus status, String message, Object data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
-
-    public ResponseStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ResponseStatus status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
 
     // Factory methods
     public static Response OK(String message, Object data) {
@@ -64,6 +38,9 @@ public class Response implements Serializable {
 
     public static Response WARNING(String message, Object data) {
         return new Response(ResponseStatus.WARNING, message, data);
+    }
+    public static Response PERMISSION_DENIED() {
+        return ERROR("error.permission.denied", null);
     }
 
     public static Response WARNING(Object data) {

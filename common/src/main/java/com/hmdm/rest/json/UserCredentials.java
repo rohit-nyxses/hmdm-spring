@@ -3,12 +3,16 @@ package com.hmdm.rest.json;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * The credentials to be used for authenticating the user to the application.
  */
+@Data
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserCredentials implements Serializable {
 
@@ -18,10 +22,8 @@ public class UserCredentials implements Serializable {
     @JsonProperty("login")
     private String login;
 
-
     @JsonProperty("password")
     private String password;
-
 
     @JsonProperty("remember")
     private boolean remember;
@@ -32,43 +34,4 @@ public class UserCredentials implements Serializable {
     @Deprecated
     @JsonProperty("email")
     private String email;
-
-
-    public boolean getRemember() {
-        return remember;
-    }
-
-    public void setRemember(boolean remember) {
-        this.remember = remember;
-    }
-
-    public UserCredentials() {
-        // Default constructor
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Deprecated
-    public String getEmail() {
-        return email;
-    }
-
-    @Deprecated
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

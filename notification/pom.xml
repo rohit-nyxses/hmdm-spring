@@ -16,7 +16,6 @@
     <artifactId>notification</artifactId>
     <name>HMDM - Notification Module</name>
     <packaging>jar</packaging>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -35,6 +34,13 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version> <!-- latest stable version as of now -->
+            <scope>provided</scope>
+        </dependency>
         <!-- ✅ MyBatis Spring Boot Starter -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -43,25 +49,27 @@
         </dependency>
 
         <!-- ✅ ActiveMQ Broker -->
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-broker</artifactId>
-            <version>5.18.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.activemq</groupId>-->
+<!--            <artifactId>activemq-broker</artifactId>-->
+<!--            <version>5.18.3</version>-->
+<!--        </dependency>-->
 
         <!-- ✅ ActiveMQ MQTT -->
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-mqtt</artifactId>
-            <version>5.18.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.activemq</groupId>-->
+<!--            <artifactId>activemq-mqtt</artifactId>-->
+<!--            <version>5.18.3</version>-->
+<!--        </dependency>-->
 
-        <!-- ✅ ActiveMQ JAAS -->
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-jaas</artifactId>
-            <version>5.18.3</version>
-        </dependency>
+<!--        &lt;!&ndash; ✅ ActiveMQ JAAS &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.activemq</groupId>-->
+<!--            <artifactId>activemq-jaas</artifactId>-->
+<!--            <version>5.18.3</version>-->
+<!--        </dependency>-->
+
+
 
         <!-- ✅ Eclipse Paho MQTT Client -->
         <dependency>

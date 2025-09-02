@@ -1,6 +1,6 @@
 package com.hmdm.persistence.mapper;
 
-import com.hmdm.persistence.domain.Customer;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
