@@ -29,9 +29,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/dev/ping/**"
                         ).permitAll()
-                        .requestMatchers("public/jwt/login", "/api/auth/**").permitAll() // Allow login/auth endpoints
+                        .requestMatchers("public/jwt/login", "rest/public/sync/**","/api/auth/**").permitAll() // Allow login/auth endpoints
 
                         .anyRequest().authenticated() // All others require authentication
                 )
