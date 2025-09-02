@@ -1,308 +1,67 @@
 package com.hmdm.persistence.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-//import io.swagger.annotations.ApiModel;
-//import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-//import com.hmdm.rest.json.LookupItem;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
-//@ApiModel(description = "A user account within MDM web application")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-// removed CustomerData interface from implementation
-public class User implements  Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = -5231237331183323703L;
 
-//    @ApiModelProperty("An ID of a user")
     private Integer id;
-
-//    @ApiModelProperty("A username of a user")
     private String login;
-
-//    @ApiModelProperty("An email address of a user")
     private String email;
-
- //   @ApiModelProperty("A name of a user")
     private String name;
 
- //   @ApiModelProperty("A password of a user (Salted SHA1 hash)")
+    // Password should not be serialized
     private transient String password;
 
-//    @ApiModelProperty(hidden = true)
     private int customerId;
-
-  //  @ApiModelProperty("A role assigned to user")
     private UserRole userRole;
 
-    //@ApiModelProperty("Are all devices available to user")
+    @Builder.Default
     private boolean allDevicesAvailable = true;
 
-   // @ApiModelProperty("Are all configs available to user")
+    @Builder.Default
     private boolean allConfigAvailable = true;
 
-   // @ApiModelProperty("Is password reset required")
+    @Builder.Default
     private boolean passwordReset = false;
 
-//    @ApiModelProperty("Authentication token")
     private String authToken;
-
-//    @ApiModelProperty("Password reset token")
     private String passwordResetToken;
-
-//    @ApiModelProperty("Third party authentication data")
     private String authData;
-
-//    @ApiModelProperty("Two-factor authentication secret")
     private String twoFactorSecret;
-
-//    @ApiModelProperty("Is two factor authentication accepted by the user")
     private boolean twoFactorAccepted;
 
-//    @ApiModelProperty("Is two factor authentication needed (a transient parameter, no db entry)")
+    @Builder.Default
     private boolean twoFactor = false;
 
-//    @ApiModelProperty("Timeout in seconds for logging out while idle (0 - no logout)")
     private Integer idleLogout;
-
-//    @ApiModelProperty("Last time for failed login (to avoid bruteforce attacks)")
     private long lastLoginFail;
 
-    // Many-to-many relations
-//    private List<LookupItem> groups;
-//    private List<LookupItem> configurations;
-
-    // Helper fields not persisted
-//    @ApiModelProperty("An old password for user to be used for verification when changing the password")
     private String oldPassword;
-
-//    @ApiModelProperty("A new password to be set for user")
     private String newPassword;
 
-//    @ApiModelProperty(hidden = true)
-    private boolean masterCustomer;
+    @Builder.Default
+    private boolean masterCustomer = false;
 
-//    @ApiModelProperty(hidden = true)
+    @Builder.Default
     private boolean editable = false;
 
-//    @ApiModelProperty(hidden = true)
+    @Builder.Default
     private boolean singleCustomer = false;
 
-
-    // ✅ All getters & setters – same as original
-    // You may replace this later with Lombok if desired.
-
-    // (Keep the full list of getters and setters here, no change.)
-
-    // ✅ Keep `toString()` as-is
-
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return this.login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    public boolean isMasterCustomer() {
-        return masterCustomer;
-    }
-
-    public void setMasterCustomer(boolean masterCustomer) {
-        this.masterCustomer = masterCustomer;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
-    }
-
-    public boolean isSingleCustomer() {
-        return singleCustomer;
-    }
-
-    public void setSingleCustomer(boolean singleCustomer) {
-        this.singleCustomer = singleCustomer;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-//    public boolean isSuperAdmin() {
-//        return this.userRole.isSuperAdmin();
-//    }
-
-    public boolean isAllDevicesAvailable() {
-        return allDevicesAvailable;
-    }
-
-    public void setAllDevicesAvailable(boolean allDevicesAvailable) {
-        this.allDevicesAvailable = allDevicesAvailable;
-    }
-
-    public boolean isAllConfigAvailable() {
-        return allConfigAvailable;
-    }
-
-    public void setAllConfigAvailable(boolean allConfigAvailable) {
-        this.allConfigAvailable = allConfigAvailable;
-    }
-
-    public boolean isPasswordReset() {
-        return passwordReset;
-    }
-
-    public void setPasswordReset(boolean passwordReset) {
-        this.passwordReset = passwordReset;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
-
-    public String getPasswordResetToken() {
-        return passwordResetToken;
-    }
-
-    public void setPasswordResetToken(String passwordResetToken) {
-        this.passwordResetToken = passwordResetToken;
-    }
-
-    public String getAuthData() {
-        return authData;
-    }
-
-    public void setAuthData(String authData) {
-        this.authData = authData;
-    }
-
-    public String getTwoFactorSecret() {
-        return twoFactorSecret;
-    }
-
-    public void setTwoFactorSecret(String twoFactorSecret) {
-        this.twoFactorSecret = twoFactorSecret;
-    }
-
-    public boolean isTwoFactorAccepted() {
-        return twoFactorAccepted;
-    }
-
-    public void setTwoFactorAccepted(boolean twoFactorAccepted) {
-        this.twoFactorAccepted = twoFactorAccepted;
-    }
-
-    public boolean isTwoFactor() {
-        return twoFactor;
-    }
-
-    public void setTwoFactor(boolean twoFactor) {
-        this.twoFactor = twoFactor;
-    }
-
-    public Integer getIdleLogout() {
-        return idleLogout;
-    }
-
-    public void setIdleLogout(Integer idleLogout) {
-        this.idleLogout = idleLogout;
-    }
-
-    public long getLastLoginFail() {
-        return lastLoginFail;
-    }
-
-    public void setLastLoginFail(long lastLoginFail) {
-        this.lastLoginFail = lastLoginFail;
-    }
-
-//    public List<LookupItem> getGroups() {
-//        return groups;
-//    }
-//
-//    public void setGroups(List<LookupItem> groups) {
-//        this.groups = groups;
-//    }
-//
-//    public List<LookupItem> getConfigurations() {
-//        return configurations;
-//    }
-//
-//    public void setConfigurations(List<LookupItem> configurations) {
-//        this.configurations = configurations;
-//    }
-
+    // Custom toString() (Lombok’s @Data already gives one, but we want to keep the business-specific format)
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(this.getName());

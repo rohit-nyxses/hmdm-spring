@@ -1,17 +1,16 @@
 package com.hmdm.persistence;
 
+
 import com.hmdm.persistence.domain.User;
 import com.hmdm.persistence.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class UnsecureDAO {
 
     private final UserMapper userMapper;
-
-    public UnsecureDAO(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     public User findByLogin(String login) {
         return userMapper.findByLogin(login);
@@ -29,10 +28,7 @@ public class UnsecureDAO {
         return user;
     }
 
-
-
-
-    public void setUserNewPasswordUnsecure(User user ) {
+    public void setUserNewPasswordUnsecure(User user) {
         userMapper.setNewPassword(user);
     }
 }

@@ -1,23 +1,17 @@
 package com.hmdm.util;
 
 import jakarta.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * A service used for running standalone tasks in the background.
  */
+@Slf4j
 @Service
 public class BackgroundTaskRunnerService {
-
-    private static final Logger logger = LoggerFactory.getLogger(BackgroundTaskRunnerService.class);
 
     /**
      * Executor for the tasks to be executed in the background.
@@ -36,7 +30,7 @@ public class BackgroundTaskRunnerService {
      * @param task the task to execute
      */
     public void submitTask(Runnable task) {
-        logger.debug("Submitting task for execution: {}. Executor state: active tasks: {}, total tasks: {}, queue size: {}",
+        log.debug("Submitting task for execution: {}. Executor state: active tasks: {}, total tasks: {}, queue size: {}",
                 task, executor.getActiveCount(), executor.getTaskCount(), executor.getQueue().size());
         executor.submit(task);
     }
@@ -51,7 +45,7 @@ public class BackgroundTaskRunnerService {
      * @return a Future representing the task
      */
     public Future<?> submitRepeatableTask(Runnable task, long initialDelay, long period, TimeUnit unit) {
-        logger.debug("Submitting repeatable task: {}. Executor state: active tasks: {}, total tasks: {}, queue size: {}",
+        log.debug("Submitting repeatable task: {}. Executor state: active tasks: {}, total tasks: {}, queue size: {}",
                 task, executor.getActiveCount(), executor.getTaskCount(), executor.getQueue().size());
         return scheduledExecutor.scheduleAtFixedRate(task, initialDelay, period, unit);
     }
@@ -61,7 +55,7 @@ public class BackgroundTaskRunnerService {
      */
     @PreDestroy
     public void shutdownExecutors() {
-        logger.info("Shutting down background task executors.");
+        log.info("Shutting down background task executors.");
         executor.shutdown();
         scheduledExecutor.shutdown();
     }
