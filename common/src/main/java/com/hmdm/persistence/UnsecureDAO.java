@@ -1,8 +1,7 @@
 package com.hmdm.persistence;
 
-import com.hmdm.persistence.domain.Device;
+
 import com.hmdm.persistence.domain.User;
-import com.hmdm.persistence.mapper.DeviceMapper;
 import com.hmdm.persistence.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class UnsecureDAO {
 
     private final UserMapper userMapper;
-    private final DeviceMapper deviceMapper;
+
     public User findByLogin(String login) {
         return userMapper.findByLogin(login);
     }
@@ -28,17 +27,7 @@ public class UnsecureDAO {
         }
         return user;
     }
-    public Device getDeviceByNumber(String number) {
-        return this.deviceMapper.getDeviceByNumber(number);
-    }
 
-    public Device getDeviceByOldNumber(String number) {
-        return this.deviceMapper.getDeviceByOldNumber(number);
-    }
-
-    public Device getDeviceByImeiOrSerial(String number) {
-        return this.deviceMapper.getDeviceByImeiOrSerial(number);
-    }
     public void setUserNewPasswordUnsecure(User user) {
         userMapper.setNewPassword(user);
     }
